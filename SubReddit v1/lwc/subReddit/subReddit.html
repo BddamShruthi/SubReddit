@@ -1,0 +1,119 @@
+<template>
+ <div class="slds-m-around_medium">
+
+    <div class="topnav">
+        <div class="search-container">
+        <div class="slds-m-bottom_small">
+            <lightning-input type="search" placeholder="Search..."  value={searchValue} onchange={searchKeyword}></lightning-input>
+    </div>
+    </div>
+    </div>
+<!-- Search records starts here -->
+<template if:false={searchempty}>
+<template if:true={subRedditRecord}>
+    <b><Div class="slds-text-heading_medium">   
+        <lightning-button-icon icon-name="utility:smiley_and_people"  variant="bare" size="large" ></lightning-button-icon>&nbsp;
+        Search Results
+         </Div></b>
+    <br>
+    <template for:each={subRedditRecord} for:item="SR" for:index="index">
+        <lightning-card key={SR.Id} class="slds-hint-parent">
+            <div class="slds slds-p-horizontal--medium">
+                    <ul>
+                        <li class="slds-p-bottom_xx-small">
+                    <lightning-button-icon icon-name="utility:like" data-id="srid" data-record-id={SR.Id} data-item={SR.Id} variant="bare" size="large" class="test" name="UpLike" data-index={index} onclick={onClickVote}></lightning-button-icon>&nbsp;&nbsp;
+                    <b>{SR.No_Of_Upvotes__c}</b>
+                </li>
+                <li class="slds-p-bottom_xx-small">
+                 <lightning-icon icon-name="standard:account" alternative-text="Subreddit" title="Subreddit"></lightning-icon>&nbsp;&nbsp;
+            <b><a onclick={handleNoficationMore} data-record-id={SR.Id}  data-item={SR.Id} >{SR.Name}</a></b>
+        </li>
+        <li class="slds-p-bottom_xx-small">
+         <lightning-button-icon icon-name="utility:dislike" data-record-id={SR.Id} data-index={index} data-item={SR.Id} variant="bare" size="large" name="DownLike" onclick={onClickVote}></lightning-button-icon>&nbsp;&nbsp;
+        <b>{SR.No_Of_Downvotes__c}</b>
+        </li>
+        <li>
+            <b><p>{SR.Category__c}</p></b>
+        </li>
+        </ul>
+</div>
+    </lightning-card>
+     </template>
+    </template>
+</template>
+<br>
+     <lightning-button label="Create Subreddit" onclick={openModal} variant="Neutral">></lightning-button>
+<br>
+<br>
+
+<template if:true={searchempty}>
+    <b><Div class="slds-text-heading_medium">   
+   <lightning-button-icon icon-name="utility:activity"  variant="bare" size="large" ></lightning-button-icon>&nbsp;
+   Trending SubReddits
+    </Div></b>
+    <br>
+    <template for:each={subRedditRecord2} for:item="SR2" for:index="index">
+        <lightning-card key={SR2.Id} >
+            <div class="slds slds-p-horizontal--medium">
+                    <ul>
+                        <li class="slds-p-bottom_xx-small">
+                    <lightning-button-icon icon-name="utility:like" data-id="srid"  data-record-id={SR2.Id} data-item={SR2.Id} variant="bare" size="large" class="test" name="UpLike" data-index={index} onclick={onClickVotedefault}></lightning-button-icon>&nbsp;&nbsp;
+                    <b>{SR2.No_Of_Upvotes__c}</b>
+                </li>
+                <li class="slds-p-bottom_xx-small">
+                 <lightning-icon icon-name="standard:account" alternative-text="Subreddit" title="Subreddit"></lightning-icon>&nbsp;&nbsp;
+            <b><a onclick={handleNoficationMore} data-record-id={SR2.Id} data-index={index} data-item={SR2.Id} >{SR2.Name}</a></b>
+        </li>
+        <li class="slds-p-bottom_xx-small">
+         <lightning-button-icon icon-name="utility:dislike" data-record-id={SR2.Id} data-index={index} data-item={SR2.Id} variant="bare" size="large" name="DownLike" onclick={onClickVotedefault}></lightning-button-icon>&nbsp;&nbsp;
+        <b>{SR2.No_Of_Downvotes__c}</b>
+        </li>
+        <li>
+            <b><p>{SR2.Category__c}</p></b>
+        </li>
+        </ul>
+</div>
+    </lightning-card>
+     </template>
+    </template>
+          
+    </div>
+
+
+    
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create Subreddit</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-record-edit-form object-api-name="SubReddit__c"  onsuccess={handleSuccess}>
+                        <div class="slds-var-m-around_medium">
+                    <label for="NameId"> Enter Subreddit Name</label>
+                    <lightning-input-field id = "NameId" field-name="Name" variant="label-hidden" required></lightning-input-field>
+                    
+                    <label for="categoryId">Select Category</label>
+                    <lightning-input-field id ="categoryId" field-name="Category__c" variant="label-hidden" required></lightning-input-field>
+                </div>
+                <div class="slds-text-align--center slds-m-top_medium">
+                    <lightning-button variant="Neutral" label="Cancel" class="slds-m-top_small" onclick={closeModal}></lightning-button> &nbsp;&nbsp;&nbsp;
+                    <lightning-button variant="brand" label="Save" type="submit"  class="slds-m-top_small" ></lightning-button>
+                    </div>
+            </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+ </template>

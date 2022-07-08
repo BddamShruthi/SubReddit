@@ -1,0 +1,8 @@
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable" access="global">
+    <aura:attribute type="String" name="postid"/>
+    <aura:attribute type="String" name="postName"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>    
+          <c:comments postid="{!v.postid}" postName="{!v.postName}"/>
+          
+</aura:component>

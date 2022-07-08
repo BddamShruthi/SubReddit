@@ -1,0 +1,161 @@
+<template>
+    <div class="slds-m-around_medium">
+    <b><Div class="slds-text-heading_medium " style="text-align:center;">
+    Welcome to Subreddit :- {redditName}
+</Div></b>
+<br>
+
+
+<div class="topnav">
+    <div class="search-container"> 
+    <div class="slds-m-bottom_small">
+        <b>Search for post</b>
+        <lightning-input type="search" placeholder="Search..."  value={searchPostValue} onchange={postSearchKeyword}></lightning-input>
+</div>
+</div>
+</div>
+
+
+<!-- Search records starts here -->
+<template if:false={PostSearchEmpty}>
+<template if:true={postRecord}>
+    <b><Div class="slds-text-heading_medium">   
+        <lightning-button-icon icon-name="utility:smiley_and_people"  variant="bare" size="large" ></lightning-button-icon>&nbsp;
+        Search Results
+         </Div></b>
+    
+<template for:each={postRecord} for:item="SR" for:index="index">
+    <lightning-card key={SR.Id} class="slds-hint-parent">
+                <ul>
+                    <li class="slds-p-bottom_xx-small">
+                <lightning-button-icon icon-name="utility:like" data-id="srid" data-record-id={SR.Id} data-item={SR.Id} variant="bare" size="large" class="test" name="UpLike" data-index={index} onclick={onClickVote}></lightning-button-icon>&nbsp;&nbsp;
+                <b>{SR.No_Of_Upvotes__c}</b>
+            </li>
+            <li class="slds-p-bottom_xx-small">
+                <lightning-icon icon-name="action:share_post" alternative-text="Subreddit" title="Subreddit" size="x-small"></lightning-icon>&nbsp;&nbsp;
+                <b><a href="#" data-record-id={SR.Id}  data-item={SR.Id} >{SR.Name}</a></b>
+    </li>
+    <li class="slds-p-bottom_xx-small">
+        <lightning-button-icon icon-name="utility:dislike" data-record-id={SR.Id} data-index={index} data-item={SR.Id} variant="bare" size="large" name="DownLike" onclick={onClickVote}></lightning-button-icon>&nbsp;&nbsp;
+    <b>{SR.No_Of_Downvotes__c}</b>
+    </li>
+    <li class="slds-p-bottom_xx-small">
+        <lightning-accordion class="comment-accordion" onsectiontoggle={handleToggleSection} active-section-name={accordianSection} allow-multiple-sections-open>
+            <lightning-accordion-section name="comment" label="Comments">
+                <div class="slds-col slds-p-left_xx-large slds-p-right_xx-large">
+                    <b><a onclick={onclickViewComments} data-record-id={SR.Id} data-name={SR.Name} data-item={SR.Id} >View Comments</a></b>
+                
+                    <lightning-record-edit-form object-api-name="Comment__c"  onsuccess={handleSuccessComment} style="height: 5px; width: 400px">
+                        <div class="slds-list_horizontal" >
+
+                    <lightning-input-field field-name="Body__c" data-name="ResetPost" variant="label-hidden" style="height: 5px; width: 400px"></lightning-input-field>&nbsp;&nbsp;
+                    <lightning-button variant="Neutral" label="Save" type="submit" class="slds-p-top_xx-small" ></lightning-button>
+                </div>
+                <lightning-input-field field-name="Post__c" variant="label-hidden" value={SR.Id} class="slds-hidden" ></lightning-input-field>
+            </lightning-record-edit-form>
+                </div>
+                </lightning-accordion-section>
+           </lightning-accordion>
+    </li>
+    </ul>
+</lightning-card>
+</template>
+</template>
+</template>
+
+     <lightning-button label="Create a Post" onclick={openModal} variant="brand">></lightning-button>
+<br>
+<br>
+
+<template if:true={PostSearchEmpty}>
+    <b><Div class="slds-text-heading_medium">   
+   <lightning-button-icon icon-name="utility:activity"  variant="bare" size="large" ></lightning-button-icon>&nbsp;
+   Trending Posts
+    </Div></b>
+    <br>
+    <template for:each={postRecordsDefault} for:item="SR2" for:index="index">
+        <lightning-card key={SR2.Id} >
+            <div class="slds slds-p-horizontal--medium">
+                    <ul>
+                        <li class="slds-p-bottom_xx-small">
+                    <lightning-button-icon icon-name="utility:like" data-id="srid" data-record-id={SR2.Id} data-item={SR2.Id} variant="bare" size="large" class="test" name="UpLike" data-index={index} onclick={onClickVotedefault}></lightning-button-icon>&nbsp;&nbsp;
+                    <b>{SR2.No_Of_Upvotes__c}</b>
+                </li>
+                <li class="slds-p-bottom_xx-small">
+                 <lightning-icon icon-name="action:share_post" alternative-text="Subreddit" title="Subreddit" size="x-small"></lightning-icon>&nbsp;&nbsp;
+            <b>{SR2.Name}</b><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{SR2.Body__c}
+        </li>
+        <li class="slds-p-bottom_xx-small">
+         <lightning-button-icon icon-name="utility:dislike" data-record-id={SR2.Id} data-index={index} data-item={SR2.Id} variant="bare" size="large" name="DownLike" onclick={onClickVotedefault}></lightning-button-icon>&nbsp;&nbsp;
+        <b>{SR2.No_Of_Downvotes__c}</b>
+        </li>
+        <li class="slds-p-bottom_xx-small">
+            <lightning-accordion class="comment-accordion" onsectiontoggle={handleToggleSection} active-section-name={accordianSection} allow-multiple-sections-open>
+                <lightning-accordion-section name="comment" label="Comments">
+                    <div class="slds-col slds-p-left_xx-large slds-p-right_xx-large">
+                        <b><a onclick={onclickViewComments} data-record-id={SR2.Id} name={SR2.Name} data-index={index} data-item={SR2.Id} >View Comments</a></b>
+                    
+                        <lightning-record-edit-form object-api-name="Comment__c"  onsuccess={handleSuccessComment} style="height: 5px; width: 400px">
+                            <div class="slds-list_horizontal" >
+    
+                        <lightning-input-field field-name="Body__c" data-name="ResetPost" variant="label-hidden" style="height: 5px; width: 400px"></lightning-input-field>&nbsp;&nbsp;
+                        <lightning-button variant="Neutral" label="Save" type="submit" class="slds-p-top_xx-small" ></lightning-button>
+                    </div>
+                    <lightning-input-field field-name="Post__c" variant="label-hidden" value={SR2.Id} class="slds-hidden" ></lightning-input-field>
+                </lightning-record-edit-form>
+                    </div>
+                    </lightning-accordion-section>
+               </lightning-accordion>
+        </li>
+        </ul>
+</div>
+    </lightning-card>
+     </template>
+    </template>
+</Div>
+
+<template if:true={isModalOpen}>
+    <!-- Modal/Popup Box LWC starts here -->
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- Modal/Popup Box LWC header here -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                    <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create a Post</h2>
+            </header>
+            <!-- Modal/Popup Box LWC body starts here -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <lightning-record-edit-form object-api-name="Post__c"  onsuccess={handleSuccess}>
+                    <div class="slds-var-m-around_medium">
+                <label for="NameId"> Enter Reddit Name</label>
+                <lightning-input-field id = "NameId" field-name="Name" variant="label-hidden" required></lightning-input-field>
+                
+                <label for="categoryId">Select Subreddit</label>
+                <lightning-input-field id ="subRedditId" field-name="SubReddit__c" value={redditid} variant="label-hidden" required></lightning-input-field>
+           
+
+            <label for="NameId"> Enter Title</label>
+            <lightning-input-field id = "TitleId" field-name="Title__c" variant="label-hidden" ></lightning-input-field>
+
+            <label for="NameId"> Enter Body</label>
+            <lightning-input-field id = "bodyId" field-name="Body__c" variant="label-hidden" ></lightning-input-field>
+        </div>
+            <div class="slds-text-align--center slds-m-top_medium">
+                <lightning-button variant="Neutral" label="Cancel" class="slds-m-top_small" onclick={closeModal}></lightning-button> &nbsp;&nbsp;&nbsp;
+                <lightning-button variant="brand" label="Save" type="submit"  ></lightning-button>
+                </div>
+        </lightning-record-edit-form>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+</template>

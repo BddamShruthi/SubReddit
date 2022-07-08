@@ -1,0 +1,9 @@
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId" access="global">
+    <aura:attribute type="String" name="redditid"/>
+    <aura:attribute type="String" name="redditName"/>
+
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>    
+        <c:postPage redditid="{!v.redditid}" redditName="{!v.redditName}"/>
+
+</aura:component>
