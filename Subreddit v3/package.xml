@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>commentController</members>
+        <members>postController</members>
+        <members>subRedditController</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>navigateToComments</members>
+        <members>navigateToPost</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    <types>
+        <members>Comment__c</members>
+        <members>Post__c</members>
+        <members>SubReddit__c</members>
+        <members>Vote__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Comment__c</members>
+        <members>Post__c</members>
+        <members>SubReddit__c</members>
+        <members>Vote__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>comments</members>
+        <members>postPage</members>
+        <members>subReddit</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <version>53.0</version>
+</Package>
